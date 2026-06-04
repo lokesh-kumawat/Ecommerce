@@ -17,11 +17,19 @@ app.use(cookieParser());
 
 // routes 
 const userRoutes = require("./routes/user.routes");
-const productRoutes = require("./routes/product.routes");
+const product = require("./controller/product.controller")
+
+const adminProductRoutes = require("./routes/product.routes");
 
 
 app.use("/api", userRoutes);
-app.use("/api/admin/product", productRoutes);
+
+
+// admin routes
+app.use("/api/admin/product", adminProductRoutes);
+
+// Public route for products
+app.get("/api/product", product.getAll);
 
 
 // Global Error Handler

@@ -1,4 +1,5 @@
 const Product = require("../model/product.model");
+const cloudinary = require("../config/cloudinary.config");
 
 // CREATE
 exports.create = async (req, res) => {
@@ -40,6 +41,22 @@ exports.update = async (req, res) => {
     const data = { ...req.body };
     if (req.file) {
       data.img_url = req.file.path;
+
+      // Delete old image from Cloudinary
+      const oldProduct = await Product.getProductById(req.params.id);
+      if (oldProduct && oldProduct.img_url) {
+        try {
+          const parts = oldProduct.img_url.split('/');
+          const filename = parts[parts.length - 1];
+          const folder = parts[parts.length - 2]; 
+          // Assuming it's in a folder like Ecom_project
+          const public_id = `${folder}/${filename.split('.')[0]}`;
+          
+          await cloudinary.uploader.destroy(public_id);
+        } catch (cloudinaryErr) {
+          console.error("Error deleting old image from cloudinary:", cloudinaryErr);
+        }
+      }
     }
     
     // Convert undefined to null for mysql2

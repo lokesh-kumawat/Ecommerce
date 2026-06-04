@@ -22,7 +22,7 @@ const ProductCard = ({ products }) => {
 
             <div
               key={index}
-              className="bg-white rounded-md shadow-sm hover:shadow-md transition overflow-hidden relative border border-gray-100"
+              className="bg-white rounded-md shadow-sm overflow-hidden relative border border-gray-100"
             >
 
               {/* Wishlist */}
@@ -38,47 +38,49 @@ const ProductCard = ({ products }) => {
               </button>
 
               {/* Image */}
-              <div className="bg-gray-50 flex items-center justify-center h-40 "> 
+              <div className="w-full h-48 bg-gray-50 flex items-center justify-center overflow-hidden"> 
                 <img
-                  src={product.img}
-                  alt={product.name}
+                  src={ product.img_url || "https://placehold.co/400x400?text=No+Image"}
+                  alt={product.name || product.product_name || "Product"}
                   className="h-full w-full object-cover"
                 />
               </div>
 
               {/* Content */}
-              <div className="px-1 pb-4 pt-1">
+              <div className="p-3 flex flex-col gap-1">
 
                 <div className="flex justify-between items-center">
-                  <h3 className="font-semibold text-sm text-gray-800">
-                    {product.name}
+                  <h3 className="font-bold text-gray-800 line-clamp-1 truncate pr-2">
+                    {product.name || product.product_name}
                   </h3>
 
-                  <span className="text-purple-600 font-semibold text-sm">
-                    {product.price}
+                  <span className="text-purple-600 font-bold whitespace-nowrap">
+                    ₹{product.price}
                   </span>
                 </div>
 
                 {/* Rating */}
                 <div className="flex items-center text-yellow-400 text-xs mt-1">
                   ⭐⭐⭐⭐⭐
-                  <span className="text-gray-400 ml-2">
-                    ({product.reviews} reviews)
+                  <span className="text-gray-400 ml-1">
+                    ({product.reviews || Math.floor(Math.random() * 100 + 10)} reviews)
                   </span>
                 </div>
 
                 {/* Buttons */}
-                <div className="flex justify-around gap-3 mt-4">
+                <div className="flex justify-between items-center gap-2 mt-3">
 
-                  <button onClick={() => { addToCart(product); alert("Added to cart ") }} className="flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg text-xs hover:bg-gray-800 cursor-pointer">
+                  <button 
+                    onClick={() => { addToCart(product); alert("Added to cart ") }} 
+                    className="flex items-center gap-1.5 bg-black text-white px-3 py-1.5 rounded text-xs font-medium hover:bg-gray-800 transition-colors"
+                  >
                     <CgShoppingCart size={14} />
                     Add
                   </button>
 
                   <Link to={`/product/${product.id}`}>
-
-                    <button className="flex items-center gap-2 border border-purple-500 text-purple-600 px-4 py-2 rounded-lg text-xs hover:bg-purple-50 cursor-pointer">
-                      Buy Now
+                    <button className="flex items-center gap-1.5 border border-purple-500 text-purple-600 px-3 py-1.5 rounded text-xs font-medium hover:bg-purple-50 transition-colors">
+                      Details
                     </button>
                   </Link>
                 </div>
