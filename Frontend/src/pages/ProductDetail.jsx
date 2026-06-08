@@ -1,5 +1,6 @@
 import { CgShoppingCart } from 'react-icons/cg';
 import { BsTruck, BsStarFill } from 'react-icons/bs';
+import { MdStar } from 'react-icons/md';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { products } from '../data/products';
@@ -18,6 +19,24 @@ const ProductDetail = () => {
 
     const [quantity, setQuantity] = useState(1);
     const [activeTab, setActiveTab] = useState('Description');
+    const [reviews, setReviews] = useState([]);
+    const [reviewForm, setReviewForm] = useState({
+        rating: 5,
+        comment: ""
+    });
+    const [hoverRating, setHoverRating] = useState(0);
+
+    const handleReviewSubmit = (e) => {
+        e.preventDefault();
+        if (reviewForm.comment.trim() === "") {
+            alert("Please write a comment");
+            return;
+        }
+        setReviews([...reviews, reviewForm]);
+        setReviewForm({ rating: 5, comment: "" });
+        alert("Review added successfully!");
+    };
+
 
     const renderTabContent = () => {
         if (activeTab === 'Specifications') {
@@ -37,26 +56,125 @@ const ProductDetail = () => {
                 </div>
             );
         }
-        if (activeTab === 'Reviews (124)') {
-            return (
-                <div className="space-y-4">
-                    <div className="flex items-center gap-2 mb-2">
-                        <div className="flex text-orange-400"><BsStarFill size={10} /><BsStarFill size={10} /><BsStarFill size={10} /><BsStarFill size={10} /><BsStarFill size={10} /></div>
-                        <span className="text-xs font-bold text-slate-800">4.9 / 5.0</span>
+       if (activeTab === "Reviews (124)") {
+    return (
+        <div className="space-y-8">
+
+            {/* Add Review Form - Top */}
+            <div className="bg-white rounded-lg p-6 shadow-sm">
+                <h3 className="text-lg font-bold text-slate-800 mb-6">
+                    Write a Review
+                </h3>
+
+                <form
+                    onSubmit={handleReviewSubmit}
+                    className="space-y-5"
+                >
+                    <div>
+                        <label className="text-sm font-semibold text-slate-700 mb-3 block">Your Rating</label>
+                        <div className="flex gap-3">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                                <button
+                                    key={star}
+                                    type="button"
+                                    onMouseEnter={() => setHoverRating(star)}
+                                    onMouseLeave={() => setHoverRating(0)}
+                                    onClick={() =>
+                                        setReviewForm({
+                                            ...reviewForm,
+                                            rating: star
+                                        })
+                                    }
+                                    className="transition-transform hover:scale-110 focus:outline-none"
+                                >
+                                    <MdStar
+                                        size={36}
+                                        className={`${
+                                            star <= (hoverRating || reviewForm.rating)
+                                                ? 'text-yellow-400'
+                                                : 'text-gray-300'
+                                        } transition-colors`}
+                                    />
+                                </button>
+                            ))}
+                        </div>
+                        <p className="text-xs text-gray-500 mt-2">{reviewForm.rating} out of 5 stars</p>
                     </div>
-                    <div className="border-t border-gray-50 pt-3">
-                        <p className="text-xs font-bold text-slate-800">Reviewer Name</p>
-                        <p className="text-xs text-gray-500 italic">"Amazing quality and fast delivery. Looks great in my office!"</p>
+
+                    <div>
+                        <label className="text-sm font-semibold text-slate-700 mb-2 block">Your Comment</label>
+                        <textarea
+                            rows="4"
+                            placeholder="Share your experience with this product..."
+                            value={reviewForm.comment}
+                            onChange={(e) =>
+                                setReviewForm({
+                                    ...reviewForm,
+                                    comment: e.target.value
+                                })
+                            }
+                            className="w-full p-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
+                        />
                     </div>
+
+                    <button
+                        type="submit"
+                        className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 rounded-lg transition-all"
+                    >
+                        Submit Review
+                    </button>
+                </form>
+            </div>
+
+            {/* Reviews Summary */}
+            <div>
+                <h3 className="text-lg font-bold text-slate-800 mb-4">
+                    Customer Reviews ({reviews.length})
+                </h3>
+
+                {/* Reviews List */}
+                <div className="space-y-3">
+                    {reviews.length > 0 ? (
+                        reviews.map((review, index) => (
+                            <div
+                                key={index}
+                                className="bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow"
+                            >
+                                <div className="flex items-start justify-between mb-2">
+                                    <div className="flex text-yellow-400 gap-0.5">
+                                        {[...Array(5)].map((_, i) => (
+                                            <BsStarFill key={i} size={14} className={i < review.rating ? 'text-yellow-400' : 'text-gray-200'} />
+                                        ))}
+                                    </div>
+                                    <span className="text-xs text-gray-400">Just now</span>
+                                </div>
+
+                                <p className="text-sm text-gray-700 leading-relaxed">
+                                    {review.comment}
+                                </p>
+                            </div>
+                        ))
+                    ) : (
+                        <div className="bg-white rounded-lg p-6 shadow-sm text-center">
+                            <p className="text-sm text-gray-500">
+                                No reviews yet. Be the first to review this product!
+                            </p>
+                        </div>
+                    )}
                 </div>
-            );
-        }
+            </div>
+
+        </div>
+    );
+}
         return (
             <p className="text-xs text-gray-500 leading-relaxed">
                 Handcrafted from sustainably sourced solid timber, each frame features precision-cut mitered corners and a deep gallery profile. Our proprietary UV protected acrylic glazing ensures vibrant longevity.
             </p>
         );
     };
+
+    
 
 
 
