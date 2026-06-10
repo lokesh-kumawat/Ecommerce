@@ -1,7 +1,7 @@
 import { BiCreditCard } from "react-icons/bi"
 import { BsArrowRight } from "react-icons/bs"
 
-const CartOrderSummery = ({subtotal, shipping, tax, total }) => {
+const CartOrderSummery = ({ subtotal, shipping, tax, total }) => {
     return (
         <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm flex flex-col sticky top-8">
             <h2 className="text-lg font-bold text-slate-800 mb-6">Order Summary</h2>

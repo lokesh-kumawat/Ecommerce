@@ -41,7 +41,7 @@ const ProductDetail = () => {
     const renderTabContent = () => {
         if (activeTab === 'Specifications') {
             return (
-                <div className="grid grid-cols-2 gap-x-8 gap-y-3">
+                <div className="max-w-2xl grid grid-cols-2 gap-x-8 gap-y-3">
                     {[
                         { label: "Material", value: "Solid Wood" },
                         { label: "Glazing", value: "UV Acrylic" },
@@ -58,10 +58,10 @@ const ProductDetail = () => {
         }
        if (activeTab === "Reviews (124)") {
     return (
-        <div className="space-y-8">
+        <div className="flex flex-col md:flex-row gap-8 w-full items-start">
 
-            {/* Add Review Form - Top */}
-            <div className="bg-white rounded-lg p-6 shadow-sm">
+            {/* Add Review Form - Right */}
+            <div className="bg-white rounded-lg p-6 shadow-sm w-full md:w-[350px] lg:w-[400px] h-fit order-1 md:order-2 shrink-0">
                 <h3 className="text-lg font-bold text-slate-800 mb-6">
                     Write a Review
                 </h3>
@@ -127,7 +127,7 @@ const ProductDetail = () => {
             </div>
 
             {/* Reviews Summary */}
-            <div>
+            <div className="flex-1 max-w-3xl order-2 md:order-1">
                 <h3 className="text-lg font-bold text-slate-800 mb-4">
                     Customer Reviews ({reviews.length})
                 </h3>
@@ -168,9 +168,11 @@ const ProductDetail = () => {
     );
 }
         return (
-            <p className="text-xs text-gray-500 leading-relaxed">
-                Handcrafted from sustainably sourced solid timber, each frame features precision-cut mitered corners and a deep gallery profile. Our proprietary UV protected acrylic glazing ensures vibrant longevity.
-            </p>
+            <div className="max-w-2xl">
+                <p className="text-xs text-gray-500 leading-relaxed">
+                    Handcrafted from sustainably sourced solid timber, each frame features precision-cut mitered corners and a deep gallery profile. Our proprietary UV protected acrylic glazing ensures vibrant longevity.
+                </p>
+            </div>
         );
     };
 
@@ -183,20 +185,12 @@ const ProductDetail = () => {
             <div className="max-w-7xl  mx-auto px-4 pt-5 grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
 
                 {/* Left Column: Image Gallery */}
-                <div className="space-y-4">
-                    <div className="relative bg-white rounded-xl p-6 shadow-sm flex justify-center items-center overflow-hidden border border-gray-100">
-                        <div className="relative shadow-xl transition-all duration-300">
-                            <img
-                                src={product.img}
-                                alt={product.name}
-                                className="w-full max-w-[280px] object-cover"
-                            />
-                        </div>
-                        <span className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full text-[8px] font-bold tracking-widest uppercase border border-gray-100 shadow-sm">
-                            Live Preview
-                        </span>
-                    </div>
-
+                <div className="flex justify-center items-start">
+                    <img
+                        src={product.img}
+                        alt={product.name}
+                        className="w-full max-w-[300px] object-cover rounded-2xl shadow-lg"
+                    />
                 </div>
 
                 {/* Right Column: Configuration */}
@@ -260,7 +254,7 @@ const ProductDetail = () => {
                         </button>
                     ))}
                 </div>
-                <div className="max-w-2xl min-h-[100px]">
+                <div className="w-full min-h-[100px]">
                     {renderTabContent()}
                 </div>
             </div>

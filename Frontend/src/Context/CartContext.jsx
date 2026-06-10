@@ -28,23 +28,31 @@ export const CartProvider = ({ children }) => {
     // Add to cart
     const addToCart = (product) => {
         setCart((prev) => {
-            const existing = prev.find((item) => item.id === product.id);
+            const productId = product.id || product._id;
+            const existing = prev.find((item) => (item.id || item._id) === productId);
 
             if (existing) {
                 return prev.map((item) =>
-                    item.id === product.id
+                    (item.id || item._id) === productId
                         ? { ...item, qty: item.qty + 1 }
                         : item
                 );
+            }
+
+            let parsedPrice = product.price;
+            if (typeof parsedPrice === "string") {
+                parsedPrice = parseFloat(parsedPrice.replace(/[^0-9.]/g, ""));
             }
 
             return [
                 ...prev,
                 {
                     ...product,
-                    price: parseFloat(product.price.replace("$", "")),
+                    id: productId,
+                    name: product.name || product.product_name,
+                    price: parsedPrice,
                     qty: 1,
-                    image: product.img
+                    image: product.img || product.img_url
                 }
             ];
         });
@@ -52,11 +60,18 @@ export const CartProvider = ({ children }) => {
 
     // Set buy now item for direct checkout
     const setBuyNow = (product, quantity = 1) => {
+        let parsedPrice = product.price;
+        if (typeof parsedPrice === "string") {
+            parsedPrice = parseFloat(parsedPrice.replace(/[^0-9.]/g, ""));
+        }
+
         setBuyNowItem({
             ...product,
-            price: parseFloat(product.price.replace("$", "")),
+            id: product.id || product._id,
+            name: product.name || product.product_name,
+            price: parsedPrice,
             qty: quantity,
-            image: product.img
+            image: product.img || product.img_url
         });
     };
 
